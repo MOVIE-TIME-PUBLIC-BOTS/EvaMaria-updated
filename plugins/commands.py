@@ -5,32 +5,72 @@ import asyncio
 from Script import script
 from pyrogram import Client, filters, enums
 from pyrogram.errors import ChatAdminRequired, FloodWait
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from database.ia_filterdb import Media, get_file_details, unpack_new_file_id
 from database.users_chats_db import db
 from info import CHANNELS, ADMINS, AUTH_CHANNEL, LOG_CHANNEL, PICS, BATCH_FILE_CAPTION, CUSTOM_FILE_CAPTION, PROTECT_CONTENT
 from utils import get_settings, get_size, is_subscribed, save_group_settings, temp
 from database.connections_mdb import active_connection
+from youtube_search import YoutubeSearch
+from youtubesearchpython import SearchVideos
+from yt_dlp import YoutubeDL
 import re
 import json
 import base64
+import datetime
+import pytz
+import requests
+import aiohttp
+import yt_dlp
+import wget
+import aiofiles
+import math
+import time
 logger = logging.getLogger(__name__)
 
 BATCH_FILES = {}
 
-@Client.on_message(filters.command("start") & filters.incoming)
+ALL_PIC = [
+  "https://telegra.ph/file/f844db93d336c13894d5e.jpg",
+  "https://telegra.ph/file/69e16ce80ffacd0f2b588.jpg"
+]
+
+SUB_PHOTO = [
+  "https://telegra.ph/file/c0814442ed2c9e121730a.jpg",
+  "https://telegra.ph/file/4e658f448e056949853db.jpg",
+  "https://telegra.ph/file/88276e1ba1b1aaa8d374f.jpg"
+]
+
+UPDATE_PIC = [
+  "https://telegra.ph/file/4746d62d561d8761a9e14.jpg",
+  "https://telegra.ph/file/cea9ec85ebdd0edfdc689.jpg"
+]
+
+@Client.on_message(filters.command("start"))
 async def start(client, message):
+    
+    Out = datetime.datetime.now(pytz.timezone("Asia/Kolkata"))
+
+    Time = Out.hour
+    if Time < 12:
+        get="GOOD MORNING"
+    elif Time < 16:
+          get="GOOD AFTERNOON"
+    elif Time < 20:
+          get="GOOD EVENING"
+    else:
+        get="GOOD EVENING"
+        
     if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         buttons = [
             [
-                InlineKeyboardButton('🤖 Updates', url='https://t.me/TeamEvamaria')
-            ],
-            [
-                InlineKeyboardButton('ℹ️ Help', url=f"https://t.me/{temp.U_NAME}?start=help"),
+                InlineKeyboardButton('⚡️CHANNEL⚡️', url='https://t.me/Movietymofficial')
             ]
             ]
         reply_markup = InlineKeyboardMarkup(buttons)
-        await message.reply(script.START_TXT.format(message.from_user.mention if message.from_user else message.chat.title, temp.U_NAME, temp.B_NAME), reply_markup=reply_markup)
+        await message.reply_photo(
+            photo=random.choice(ALL_PIC),
+            caption=f"""HI {get} {message.from_user.mention} HOW ARE YOU BRO?""",reply_markup=reply_markup)
         await asyncio.sleep(2) # 😢 https://github.com/EvamariaTG/EvaMaria/blob/master/plugins/p_ttishow.py#L17 😬 wait a bit, before checking.
         if not await db.get_chat(message.chat.id):
             total=await client.get_chat_members_count(message.chat.id)
@@ -42,13 +82,15 @@ async def start(client, message):
         await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention))
     if len(message.command) != 2:
         buttons = [[
-            InlineKeyboardButton('➕ Add Me To Your Groups ➕', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
-            ],[
             InlineKeyboardButton('🔍 Search', switch_inline_query_current_chat=''),
-            InlineKeyboardButton('🤖 Updates', url='https://t.me/TeamEvamaria')
-            ],[
-            InlineKeyboardButton('ℹ️ Help', callback_data='help'),
+            InlineKeyboardButton('ℹ️ Help', callback_data='help')
+        ], [
+            InlineKeyboardButton('CHANNEL', url='https://t.me/Movietymofficial'),
+            InlineKeyboardButton('GROUP', url='https://t.me/Movietym_official_group')
+        ], [
             InlineKeyboardButton('😊 About', callback_data='about')
+        ], [
+            InlineKeyboardButton("🔐CLOSE", callback_data="close_data")
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
@@ -79,22 +121,38 @@ async def start(client, message):
                 btn.append([InlineKeyboardButton(" 🔄 Try Again", callback_data=f"{pre}#{file_id}")])
             except (IndexError, ValueError):
                 btn.append([InlineKeyboardButton(" 🔄 Try Again", url=f"https://t.me/{temp.U_NAME}?start={message.command[1]}")])
-        await client.send_message(
+                         
+        Out = datetime.datetime.now(pytz.timezone("Asia/Kolkata"))
+        
+        Time = Out.hour
+        if Time < 12:
+            get="GOOD MORNING"
+        elif Time < 16:
+              get="GOOD AFTERNOON"
+        elif Time < 20:
+              get="GOOD EVENING"
+        else:
+            get="GOOD EVENING"
+            
+        await client.send_photo(
             chat_id=message.from_user.id,
-            text="**Please Join My Updates Channel to use this Bot!**",
+            photo=random.choice(SUB_PHOTO),
+            caption=f"""**Hi {get} PLEASE JOIN OUR CHANNEL TO USE THE BOT!..\n\nഞങ്ങളുടെ ചാനലിൽ ജോയിൻ ചെയ്താൽ മാത്രമേ ബോട്ട് ഉപയോഗിക്കാൻ പറ്റുകയുള്ളു!...**""",
             reply_markup=InlineKeyboardMarkup(btn),
             parse_mode=enums.ParseMode.MARKDOWN
             )
         return
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
         buttons = [[
-            InlineKeyboardButton('➕ Add Me To Your Groups ➕', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
-            ],[
             InlineKeyboardButton('🔍 Search', switch_inline_query_current_chat=''),
-            InlineKeyboardButton('🤖 Updates', url='https://t.me/TeamEvamaria')
-            ],[
-            InlineKeyboardButton('ℹ️ Help', callback_data='help'),
+            InlineKeyboardButton('ℹ️ Help', callback_data='help')
+        ], [
+            InlineKeyboardButton('CHANNEL', url='https://t.me/Movietymofficial'),
+            InlineKeyboardButton('GROUP', url='https://t.me/Movietym_official_group')
+        ], [
             InlineKeyboardButton('😊 About', callback_data='about')
+        ], [
+            InlineKeyboardButton("🔐CLOSE", callback_data="close_data")
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
@@ -520,3 +578,185 @@ async def save_template(client, message):
     template = message.text.split(" ", 1)[1]
     await save_group_settings(grp_id, 'template', template)
     await sts.edit(f"Successfully changed template for {title} to\n\n{template}")
+    
+    #HELP COMMAND
+@Client.on_message(filters.command("help"))
+async def help_message(bot, message): 
+    await message.reply_photo(  
+        photo=random.choice(PICS),
+        caption=f"""Hi {message.from_user.mention} here is my help commands""",
+        reply_markup=InlineKeyboardMarkup( [[ 
+            InlineKeyboardButton('𝚂𝙾𝙽𝙶', callback_data='songs'),
+            InlineKeyboardButton('𝙵𝚄𝙽', callback_data='fun')
+            ],[
+            InlineKeyboardButton('Extra Mods', callback_data='extra'),
+            InlineKeyboardButton('𝙿𝙸𝙽𝙶', callback_data='pings')
+            ],[
+            InlineKeyboardButton('🔮 Status', callback_data='stats'),
+            InlineKeyboardButton("𝚅𝙸𝙳𝙴𝙾", callback_data='video')
+            ],[
+            InlineKeyboardButton("𝑆𝑇𝑌𝐿𝐼𝑆𝐻 𝑇𝐸𝑋𝑇", callback_data='text')
+            ],[ 
+            InlineKeyboardButton("🔐CLOSE", callback_data="close_data")
+            ]]
+            )
+        )
+    
+    #JUST FOR A RASAM
+    
+    
+@Client.on_message(filters.command("update") & filters.user(ADMINS))
+async def update(client, message): 
+    if message.chat.type in ['group', 'supergroup']:
+        buttons = [
+            [
+                InlineKeyboardButton("UPDATE NOW🛠", callback_data="my_update")
+            ]
+            ]
+        reply_markup = InlineKeyboardMarkup(buttons)
+        await message.reply_photo(  
+        photo=random.choice(UPDATE_PIC),
+        caption="UPDATE COMMAND RECOGNIZED, Check the Code before update", reply_markup=reply_markup)
+        
+    
+    
+    
+    
+ #SONG COMMAND
+
+def time_to_seconds(time):
+    stringt = str(time)
+    return sum(int(x) * 60 ** i for i, x in enumerate(reversed(stringt.split(':'))))
+
+
+@Client.on_message(filters.command("song"))
+def song(client, message):
+
+    user_id = message.from_user.id 
+    user_name = message.from_user.first_name 
+    rpk = "["+user_name+"](tg://user?id="+str(user_id)+")"
+
+    query = ''
+    for i in message.command[1:]:
+        query += ' ' + str(i)
+    print(query)
+    m = message.reply("**GETTING YOUR SONG🎶..**")
+    ydl_opts = {"format": "bestaudio[ext=m4a]"}
+    try:
+        results = YoutubeSearch(query, max_results=1).to_dict()
+        link = f"https://youtube.com{results[0]['url_suffix']}"
+        #print(results)
+        title = results[0]["title"][:40]       
+        thumbnail = results[0]["thumbnails"][0]
+        thumb_name = f'thumb{title}.jpg'
+        thumb = requests.get(thumbnail, allow_redirects=True)
+        open(thumb_name, 'wb').write(thumb.content)
+
+
+        performer = f"[MINNAL MURALI]" 
+        duration = results[0]["duration"]
+        url_suffix = results[0]["url_suffix"]
+        views = results[0]["views"]
+
+    except Exception as e:
+        m.edit(
+            "**GIVE CORRECT NAME OF THE SONG💤..**"
+        )
+        print(str(e))
+        return
+    m.edit("**𝓓𝓞𝓦𝓝𝓛𝓞𝓐𝓓𝓘𝓝𝓖 𝓢𝓞𝓝𝓖 𝓟𝓛𝓩 𝓦𝓐𝓘𝓣**")
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info_dict = ydl.extract_info(link, download=False)
+            audio_file = ydl.prepare_filename(info_dict)
+            ydl.process_info(info_dict)
+        rep = '**SUPPORT⚡️ - [MOVIE TIME](https://t.me/Movietymofficial)**'
+        secmul, dur, dur_arr = 1, 0, duration.split(':')
+        for i in range(len(dur_arr)-1, -1, -1):
+            dur += (int(dur_arr[i]) * secmul)
+            secmul *= 60
+        message.reply_audio(audio_file, caption=rep, parse_mode='md',quote=False, title=title, duration=dur, performer=performer, thumb=thumb_name)
+        m.delete()
+    except Exception as e:
+        m.edit("**🚫 𝙴𝚁𝚁𝙾𝚁 🚫**")
+        print(e)
+
+    try:
+        os.remove(audio_file)
+        os.remove(thumb_name)
+    except Exception as e:
+        print(e)
+
+def get_text(message: Message) -> [None,str]:
+    text_to_return = message.text
+    if message.text is None:
+        return None
+    if " " not in text_to_return:
+        return None
+    try:
+        return message.text.split(None, 1)[1]
+    except IndexError:
+        return None
+      
+      #VIDEO COMMAND
+      
+@Client.on_message(filters.command(["video", "mp4"]))
+async def vsong(client, message: Message):
+    urlissed = get_text(message)
+
+    pablo = await client.send_message(
+        message.chat.id, f"**GETTING YOR VIDEO** `{urlissed}`"
+    )
+    if not urlissed:
+        await pablo.edit("Invalid Command Syntax Please Check help Menu To Know More!")
+        return
+
+    search = SearchVideos(f"{urlissed}", offset=1, mode="dict", max_results=1)
+    mi = search.result()
+    mio = mi["search_result"]
+    mo = mio[0]["link"]
+    thum = mio[0]["title"]
+    fridayz = mio[0]["id"]
+    mio[0]["channel"]
+    kekme = f"https://img.youtube.com/vi/{fridayz}/hqdefault.jpg"
+    await asyncio.sleep(0.6)
+    url = mo
+    sedlyf = wget.download(kekme)
+    opts = {
+        "format": "best",
+        "addmetadata": True,
+        "key": "FFmpegMetadata",
+        "prefer_ffmpeg": True,
+        "geo_bypass": True,
+        "nocheckcertificate": True,
+        "postprocessors": [{"key": "FFmpegVideoConvertor", "preferedformat": "mp4"}],
+        "outtmpl": "%(id)s.mp4",
+        "logtostderr": False,
+        "quiet": True,
+    }
+    try:
+        with YoutubeDL(opts) as ytdl:
+            ytdl_data = ytdl.extract_info(url, download=True)
+    except Exception as e:
+        await event.edit(event, f"**𝙳𝚘𝚠𝚗𝚕𝚘𝚊𝚍 𝙵𝚊𝚒𝚕𝚎𝚍 𝙿𝚕𝚎𝚊𝚜𝚎 𝚃𝚛𝚢 𝙰𝚐𝚊𝚒𝚗..♥️** \n**Error :** `{str(e)}`")
+        return
+    c_time = time.time()
+    file_stark = f"{ytdl_data['id']}.mp4"
+    capy = f"""
+**TITLE :** [{thum}]({mo})
+**REQUESTED BY :** {message.from_user.mention}
+"""
+    await client.send_video(
+        message.chat.id,
+        video=open(file_stark, "rb"),
+        duration=int(ytdl_data["duration"]),
+        file_name=str(ytdl_data["title"]),
+        thumb=sedlyf,
+        caption=capy,
+        supports_streaming=True,        
+        reply_to_message_id=message.message_id 
+    )
+    await pablo.delete()
+    for files in (sedlyf, file_stark):
+        if files and os.path.exists(files):
+            os.remove(files)      
