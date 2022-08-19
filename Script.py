@@ -1,15 +1,16 @@
 class script(object):
-    START_TXT = """𝙷𝙴𝙻𝙾 {},
-𝙼𝚈 𝙽𝙰𝙼𝙴 𝙸𝚂 <a href=https://t.me/{}>{}</a>, 𝙸 𝙲𝙰𝙽 𝙿𝚁𝙾𝚅𝙸𝙳𝙴 𝙼𝙾𝚅𝙸𝙴𝚂, 𝙹𝚄𝚂𝚃 𝙰𝙳𝙳 𝙼𝙴 𝚃𝙾 𝚈𝙾𝚄𝚁 𝙶𝚁𝙾𝚄𝙿 𝙰𝙽𝙳 𝙴𝙽𝙹𝙾𝚈 😍"""
+    START_TXT = """HELLO {},
+MY NAME IS <a href=https://t.me/{}>{}</a>, ഞാൻ <a href=https://t.me/Movietym_official_group>MOVIE TIME</a> ഗ്രൂപ്പിലെ ബോട്ടാണ് നിങ്ങൾക്ക് പുതിയ സിനിമകൾ വേണോ..? എങ്കിൽ പെട്ടെന്ന് തന്നെ ഞങ്ങളുടെ ഗ്രൂപ്പിൽ ജൊയിൻ ചെയ്യു ...🤩👉<a href=https://t.me/Movietym_official_group>MOVIE TIME</a>"""
     HELP_TXT = """𝙷𝙴𝚈 {}
 𝙷𝙴𝚁𝙴 𝙸𝚂 𝚃𝙷𝙴 𝙷𝙴𝙻𝙿 𝙵𝙾𝚁 𝙼𝚈 𝙲𝙾𝙼𝙼𝙰𝙽𝙳𝚂."""
     ABOUT_TXT = """✯ 𝙼𝚈 𝙽𝙰𝙼𝙴: {}
-✯ 𝙲𝚁𝙴𝙰𝚃𝙾𝚁: <a href=https://t.me/TeamEvamaria>Team Eva Maria</a>
+✯ CHANNEL:<a href=https://t.me/Movietymofficial>MOVIE TIME</a>
+✯ GROUP:<a href=https://t.me/Movietym_official_group>MOVIE TIME GROUP</a>
 ✯ 𝙻𝙸𝙱𝚁𝙰𝚁𝚈: 𝙿𝚈𝚁𝙾𝙶𝚁𝙰𝙼
 ✯ 𝙻𝙰𝙽𝙶𝚄𝙰𝙶𝙴: 𝙿𝚈𝚃𝙷𝙾𝙽 𝟹
 ✯ 𝙳𝙰𝚃𝙰 𝙱𝙰𝚂𝙴: 𝙼𝙾𝙽𝙶𝙾 𝙳𝙱
 ✯ 𝙱𝙾𝚃 𝚂𝙴𝚁𝚅𝙴𝚁: 𝙷𝙴𝚁𝙾𝙺𝚄
-✯ 𝙱𝚄𝙸𝙻𝙳 𝚂𝚃𝙰𝚃𝚄𝚂: v1.0.1 [ 𝙱𝙴𝚃𝙰 ]"""
+✯ 𝙱𝚄𝙸𝙻𝙳 𝚂𝚃𝙰𝚃𝚄𝚂: v1.0.3 [ 𝙱𝙴𝚃𝙰 ]"""
     SOURCE_TXT = """<b>NOTE:</b>
 - Eva Maria is a open source project. 
 - Source - https://github.com/EvamariaTG/EvaMaria  
@@ -67,7 +68,7 @@ class script(object):
     EXTRAMOD_TXT = """Help: <b>Extra Modules</b>
 
 <b>NOTE:</b>
-these are the extra features of Eva Maria
+these are the extra features of Minnal Murali
 
 <b>Commands and Usage:</b>
 • /id - <code>get id of a specified user.</code>
@@ -105,3 +106,77 @@ Added By - {}
 ID - <code>{}</code>
 Name - {}
 """
+    
+    
+    
+    SONG_TXT = """<b>🎶SONG DOWNLOAD MODULE🎶</b>
+    
+🎶 Song download module,Helps to download your favourite song.Try it..🎶
+
+<b>COMMANDS</b>
+
+››  /song SONG NAME
+NOTE:- WORKS ON BOTH PMS AND GROUP🎶"""
+    
+    
+    PINGS_TXT ="""<b>🌟Ping:</b>
+Helps you to know your ping 🚶🏼‍♂️
+<b>Commands:</b>
+• /alive - To check you are alive.
+• /help - To get help.
+• /ping - To get your ping.
+• /group - Group Details."""
+     
+    FUN_TXT ="""<b>Gᴀᴍᴇs</b> 
+    
+<b>⚡ 𝙹𝚄𝚂𝚃 𝚂𝙾𝙼𝙴 𝙺𝙸𝙽𝙳 𝙾𝙵 𝙵𝚄𝙽 𝚃𝙷𝙸𝙽𝙶𝚂 ⚡</b>
+ 
+𝟣. /dice - 𝚁𝙾𝙻𝙴 𝚃𝙷𝙴 𝙳𝙸𝙲𝙴 
+𝟤. /Throw 𝗈𝗋 /Dart - 𝚃𝙾 𝙼𝙰𝙺𝙴 𝙳𝙰𝚁𝚃 
+3. /dialogues - 𝚂𝙾𝙼𝙴 𝚁𝙰𝙽𝙳𝙾𝙼 𝙳𝙸𝙰𝙻𝙾𝙶𝚄𝙴𝚂 
+4. /Goal or /Shoot - 𝚃𝙾 𝙼𝙰𝙺𝙴 𝙰 𝙶𝙾𝙰𝙻 𝙾𝚁 𝚂𝙷𝙾𝙾𝚃
+5. /luck or /cownd - 𝚂𝙿𝙸𝙽 𝙰𝙽𝙳 𝚃𝚁𝚈 𝚈𝙾𝚄𝚁 𝙻𝚄𝙲𝙺"""
+    
+    
+    UPDATE_TXT ="""
+BOT UPDATED SUCCESSFULLY⚙️..
+<b>imdb.py==2021.4.18</b>
+<b>Added Stylish Text Generator 🛠 - hit /help</b>
+<i>starting bot ⚡️</i>"""
+
+
+    
+    VIDEO_TXT ="""𝙷𝙴𝙻𝙿 𝚈𝙾𝚄 𝚃𝙾 𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳 𝚅𝙸𝙳𝙴𝙾 𝙵𝚁𝙾𝙼 𝚈𝙾𝚄𝚃𝚄𝙱𝙴.
+• 𝘜𝘴𝘢𝘨𝘦
+𝘠𝘰𝘶 𝘊𝘢𝘯 𝘋𝘰𝘸𝘯𝘭𝘰𝘢𝘥 𝘈𝘯𝘺 𝘝𝘪𝘥𝘦𝘰 𝘍𝘳𝘰𝘮 𝘠𝘰𝘶𝘵𝘶𝘣𝘦
+𝙃𝙤𝙬 𝙏𝙤 𝙐𝙨𝙚
+• 𝘛𝘺𝘱𝘦 /video or /mp4 𝘈𝘯𝘥 (https://youtu.be/fQOjh-mmNKo)
+• 𝘛𝘺𝘱𝘦 /video video name 
+• 𝘌𝘹𝘢𝘮𝘱𝘭𝘦:
+/video kgf malayalam trailer
+<code>/video https://youtu.be/fQOjh-mmNKo</code>
+NOTE - Works on both pm and group"""
+    
+    STYLISH_TXT ="""
+🆂🆃🆈🅻🅸🆂🅷 🆃🅴🆇🆃  🅶🅴🅽🅴🆁🅰️🆃🅴🆁
+<b>⌨️𝑯𝑶𝑾 𝑻𝑶 𝑼𝑺𝑬</b>
+• 𝗧𝘆𝗽𝗲 /𝘁𝗲𝘅𝘁 [𝗬𝗼𝘂𝗿 𝗗𝗲𝘀𝗶𝗿𝗲𝗱 𝗧𝗲𝘅𝘁]
+• 𝘌𝘹𝘢𝘮𝘱𝘭𝘦:
+<code>/text hello bro</code>
+"""
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
