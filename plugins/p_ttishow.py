@@ -7,6 +7,7 @@ from database.ia_filterdb import Media
 from utils import get_size, temp, get_settings
 from Script import script
 from pyrogram.errors import ChatAdminRequired
+import random
 
 """-----------------------------------------https://t.me/GetTGLink/4179 --------------------------------------"""
 
@@ -38,7 +39,7 @@ async def save_group(bot, message):
             return
         buttons = [[
             InlineKeyboardButton('ℹ️ Help', url=f"https://t.me/{temp.U_NAME}?start=help"),
-            InlineKeyboardButton('📢 Updates', url='https://t.me/TeamEvamaria')
+            InlineKeyboardButton('MAIN CHANNEL', url='https://t.me/Movietymofficial')
         ]]
         reply_markup=InlineKeyboardMarkup(buttons)
         await message.reply_text(
@@ -53,7 +54,19 @@ async def save_group(bot, message):
                         await (temp.MELCOW['welcome']).delete()
                     except:
                         pass
-                temp.MELCOW['welcome'] = await message.reply(f"<b>Hey , {u.mention}, Welcome to {message.chat.title}</b>")
+                temp.MELCOW['welcome'] = await message.reply_photo(
+                                             photo=random.choice(JOIN_PIC),
+                                             caption=f"""<b>Hey , {u.mention}, Welcome to {message.chat.title}</b>""",
+                                             reply_markup=InlineKeyboardMarkup( [[ 
+                                                 InlineKeyboardButton("Join Our Channel", url="t.me/Movietymofficial")
+                                                 ]] 
+                                                 )
+                                             )
+                
+JOIN_PIC = [
+  "https://telegra.ph/file/c0814442ed2c9e121730a.jpg"
+]                
+                
 
 
 @Client.on_message(filters.command('leave') & filters.user(ADMINS))
