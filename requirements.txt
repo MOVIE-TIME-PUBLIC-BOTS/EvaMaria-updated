@@ -47,7 +47,6 @@ Pillow
 ujson
 telethon>=1.10.3
 datetime
-ffmpeg
 py-tgcalls
 
 
